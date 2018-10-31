@@ -15,7 +15,7 @@ public class Main implements EventListener {
         //设置保存格式
         downloader.setSaveResult(Downloader.Type.EPUB);
         //设置保存路径，默认在项目文件夹下
-//        downloader.setSavePath("/Users/jiangzilai/Documents/book");
+        downloader.setSavePath("/Users/jiangzilai/Documents/book");
         System.out.println("输入书籍名字:");
         String bookName = scanner.nextLine();
         downloader.download(bookName);

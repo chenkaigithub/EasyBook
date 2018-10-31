@@ -33,7 +33,7 @@ public class Kanshenzuo extends BaseSite {
     }
 
     @Override
-    public List<Book> search(String bookName) throws IOException {
+    public List<Book> search(String bookName) throws Exception {
         String url = "http://www.kanshenzuo.com/modules/article/search.php";
         RequestBody requestBody = new FormBody.Builder()
                 .addEncoded("searchkey", URLEncoder.encode(bookName, "gbk"))
@@ -42,13 +42,16 @@ public class Kanshenzuo extends BaseSite {
         String html = NetUtil.getHtml(url, requestBody, getEncodeType());
         Element content = Jsoup.parse(html).getElementById("content");
         Elements trs = content.getElementsByTag("tr");
-        if (trs.size() < 1) {
-            throw new IOException("解析失败");
+        if (trs.size() <= 1) {
+            throw new IOException();
         }
         trs.remove(0);
         List<Book> bookList = new ArrayList<>(trs.size());
         for (Element tr : trs) {
             Elements tds = tr.getElementsByTag("td");
+            if (tds == null){
+                throw new IOException();
+            }
             String bkName = tds.get(0).getElementsByTag("a").first().text();
             String bkUrl = tds.get(0).getElementsByTag("a").first().attr("href");
             String lastChapterName = tds.get(1).getElementsByTag("a").first().text();

@@ -22,7 +22,7 @@ public class Bishenge extends BaseSite {
     }
 
     @Override
-    public List<Book> search(String bookName) throws IOException {
+    public List<Book> search(String bookName) throws Exception {
         return BookGriper.baidu(this, bookName, "7751645214184726687");
     }
 

@@ -22,7 +22,7 @@ public class BookGriper {
      * @param s        网站识别码
      * @return
      */
-    public static List<Book> baidu(BaseSite site, String bookName, String s) throws IOException {
+    public static List<Book> baidu(BaseSite site, String bookName, String s) throws Exception {
         String url = "http://zhannei.baidu.com/cse/search?q="
                 + URLEncoder.encode(bookName, "gbk")
                 + "&s=" + s;
@@ -31,7 +31,7 @@ public class BookGriper {
         Element body = Jsoup.parse(html).body();
         Elements results = body.getElementsByClass("result-list");
         if (results.size() == 0) {
-            throw new IOException("没有找到该小说");
+            throw new IOException();
         }
 
         Elements details = results.get(0).getElementsByClass("result-game-item-detail");

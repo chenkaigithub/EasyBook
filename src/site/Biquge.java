@@ -28,7 +28,7 @@ public class Biquge extends BaseSite {
     }
 
     @Override
-    public List<Book> search(String bookName) throws IOException {
+    public List<Book> search(String bookName) throws Exception {
         String url = "http://www.biquge.com.tw/modules/article/soshu.php?searchkey="
                 + URLEncoder.encode(bookName, "gbk");
         String html = NetUtil.getHtml(url, getEncodeType());
@@ -44,14 +44,15 @@ public class Biquge extends BaseSite {
             return Collections.singletonList(book);
         } else {
             List<String> trs = RegexUtil.regexExcept("<tr", "</tr>", html);
-            if (trs.size() <= 0) {
-                throw new IOException("解析出错");
+            if (trs.size() == 0) {
+                throw new IOException();
             }
             trs.remove(0);
             List<Book> bookList = new ArrayList<>(trs.size());
             for (String tr : trs) {
                 List<String> tds = RegexUtil.regexInclude("<td", "</td>", tr);
                 List<String> as = RegexUtil.regexInclude("<a", "</a>", tr);
+                if (tds.size() == 0 || as.size() == 0) throw new IOException();
                 String bkName = new RegexUtil.Tag(as.get(0)).getText();
                 String bkUrl = new RegexUtil.Tag(as.get(0)).getValue("href");
                 String lastChapterName = new RegexUtil.Tag(as.get(1)).getText();

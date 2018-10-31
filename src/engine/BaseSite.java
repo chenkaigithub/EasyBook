@@ -39,7 +39,7 @@ public abstract class BaseSite {
         return encodeType;
     }
 
-    public abstract List<Book> search(String bookName) throws IOException;
+    public abstract List<Book> search(String bookName) throws Exception;
 
     public abstract List<Catalog> parseCatalog(String catalogHtml, String url);
 

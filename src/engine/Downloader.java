@@ -10,6 +10,10 @@ import util.conventer.FoxEpubWriter;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created By zia on 2018/10/30.
@@ -40,21 +44,44 @@ public class Downloader {
         }
         eventListener.pushMessage("开始搜索书籍");
 
-        int resultSize = 0;
-        List<List<Book>> bookListList = new ArrayList<>();
+        ConcurrentLinkedQueue<List<Book>> bookListList = new ConcurrentLinkedQueue<>();
+        CountDownLatch countDownLatch = new CountDownLatch(sites.size());
+        ExecutorService service = Executors.newFixedThreadPool(20);
+
         for (BaseSite site : sites) {
-            List<Book> results = null;
-            try {
-                results = site.search(bookName);
-                resultSize += results.size();
-            } catch (IOException e) {
-                eventListener.pushMessage(e.getMessage());
-            }
-            if (results == null) {
-                eventListener.pushMessage(site.getSiteName() + "搜索结果加载错误");
-                continue;
-            }
-            bookListList.add(results);
+            service.execute(() -> {
+                List<Book> results = null;
+                try {
+                    results = site.search(bookName);
+                } catch (Exception e) {
+                    eventListener.pushMessage(e.getMessage());
+                } finally {
+                    countDownLatch.countDown();
+                }
+                if (results == null) {
+                    eventListener.pushMessage(site.getSiteName() + "搜索结果加载错误");
+                    return;
+                }
+                bookListList.add(results);
+            });
+        }
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            eventListener.onError("搜索时发生并发错误", e);
+        } finally {
+            service.shutdown();
+        }
+
+
+        int resultSize = 0;
+        for (List<Book> bookList : bookListList) {
+            resultSize += bookList.size();
+        }
+
+        if (resultSize == 0) {
+            eventListener.onError("没有搜索到书籍", new IOException());
         }
 
         //混合插入，每一个站点的
@@ -68,9 +95,13 @@ public class Downloader {
             }
             index++;
         }
-        //按长度微调排序
+        //微调排序
         bookList.sort((o1, o2) -> {
-            if (o1.getBookName().length() == bookName.length()
+            if (o1.getBookName().equals(bookName) && !o2.getBookName().equals(bookName)) {
+                return -1;
+            } else if (!o1.getBookName().equals(bookName) && o2.getBookName().equals(bookName)) {
+                return 1;
+            } else if (o1.getBookName().length() == bookName.length()
                     && o2.getBookName().length() != bookName.length()) {
                 return -1;
             } else if (o1.getBookName().length() != bookName.length()

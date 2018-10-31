@@ -1,9 +1,7 @@
 package util;
 
 import engine.BaseSite;
-import site.Biquge;
-import site.Bishenge;
-import site.Kanshenzuo;
+import site.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +13,8 @@ public class SiteUtil {
     public static List<BaseSite> getAllSites() {
         List<BaseSite> baseSites = new ArrayList<>();
         baseSites.add(new Biquge());
+        baseSites.add(new Dingdian());
+        baseSites.add(new Xbiquge());
         baseSites.add(new Kanshenzuo());
         baseSites.add(new Bishenge());
         return baseSites;
