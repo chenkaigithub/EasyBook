@@ -17,6 +17,9 @@ public class SiteUtil {
         baseSites.add(new Xbiquge());
         baseSites.add(new Kanshenzuo());
         baseSites.add(new Bishenge());
+        baseSites.add(new Mainhuatang());
+        baseSites.add(new Jidian());
+        baseSites.add(new Shouji());
         return baseSites;
     }
 }

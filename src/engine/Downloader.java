@@ -35,7 +35,7 @@ public class Downloader {
 
     public void search(String bookName, List<BaseSite> sites) {
         if (path == null) {
-            eventListener.onError("请输入文件路径", new FileNotFoundException());
+            eventListener.onError("请配置文件路径", new FileNotFoundException());
             return;
         }
         eventListener.pushMessage("开始搜索书籍");
@@ -55,7 +55,7 @@ public class Downloader {
                     countDownLatch.countDown();
                 }
                 if (results == null) {
-                    eventListener.pushMessage(site.getSiteName() + "搜索结果加载错误");
+                    eventListener.pushMessage(site.getSiteName() + "搜索结果错误，正在尝试其它网站");
                     return;
                 }
                 bookListList.add(results);
@@ -97,6 +97,10 @@ public class Downloader {
                 return -1;
             } else if (!o1.getBookName().equals(bookName) && o2.getBookName().equals(bookName)) {
                 return 1;
+            } else if (o1.getBookName().contains(bookName) && !o2.getBookName().contains(bookName)) {
+                return -1;
+            } else if (!o1.getBookName().contains(bookName) && o2.getBookName().contains(bookName)) {
+                return 1;
             } else if (o1.getBookName().length() == bookName.length()
                     && o2.getBookName().length() != bookName.length()) {
                 return -1;
@@ -130,18 +134,18 @@ public class Downloader {
 
         String bkName = book.getBookName() + "-" + book.getSite().getSiteName();
         try {
-            save(chapters, bkName, type);
+            String savePath = save(chapters, bkName, type);
+            eventListener.onEnd("保存成功，路径：" + savePath);
         } catch (Exception e) {
             eventListener.onError("文件保存失败", e);
         }
-
-        eventListener.onEnd("保存成功，路径：" + path + File.separator + bkName);
     }
 
-    private void save(List<Chapter> chapters, String bookName, Type type) throws IOException {
+    private String save(List<Chapter> chapters, String bookName, Type type) throws IOException {
         if (type == Type.EPUB) {
             String name = bookName + ".epub";
-            File file = new File(path + File.separator + name);
+            String savePath = path + File.separator + name;
+            File file = new File(savePath);
             FoxEpubWriter foxEpubWriter = new FoxEpubWriter(file, bookName);
             for (Chapter chapter : chapters) {
                 StringBuilder content = new StringBuilder();
@@ -155,10 +159,11 @@ public class Downloader {
                 foxEpubWriter.addChapter(chapter.getChapterName(), content.toString());
             }
             foxEpubWriter.saveAll();
+            return savePath;
         } else {
+            String savePath = path + File.separator + bookName + ".txt";
             BufferedWriter bufferedWriter = new BufferedWriter(
-                    new OutputStreamWriter(
-                            new FileOutputStream(path + File.separator + bookName)));
+                    new OutputStreamWriter(new FileOutputStream(savePath)));
             for (Chapter chapter : chapters) {
                 bufferedWriter.write(chapter.getChapterName());
                 bufferedWriter.write("\n\n");
@@ -172,6 +177,7 @@ public class Downloader {
                 //章节结束空三行，用来分割下一章节
                 bufferedWriter.write("\n\n\n");
             }
+            return savePath;
         }
     }
 

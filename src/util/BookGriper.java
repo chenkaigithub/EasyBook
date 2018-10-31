@@ -4,6 +4,7 @@ import bean.Book;
 import engine.BaseSite;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -50,5 +51,28 @@ public class BookGriper {
         }
 
         return bookList;
+    }
+
+    public static List<String> getContentsByBR(String content) {
+        String lines[] = content.split("<br>|<br/>|<br />");
+        List<String> contents = new ArrayList<>();
+        for (String line : lines) {
+            if (!line.trim().isEmpty()) {
+                contents.add(line);
+            }
+        }
+        System.out.println(contents);
+        return contents;
+    }
+
+    public static List<String> getContentsByTextNodes(List<TextNode> textNodes) {
+        List<String> contents = new ArrayList<>();
+        for (TextNode textNode : textNodes) {
+            String line = textNode.text();
+            if (!line.trim().isEmpty()) {
+                contents.add(line);
+            }
+        }
+        return contents;
     }
 }

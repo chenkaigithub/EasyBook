@@ -167,6 +167,7 @@ public class GUI extends Application implements EventListener {
 
     @Override
     public void onError(String msg, Exception e) {
+        e.printStackTrace();
         Platform.runLater(() -> {
             status.setText(msg);
             selectedBook = null;

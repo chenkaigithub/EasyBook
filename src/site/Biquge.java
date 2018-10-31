@@ -3,6 +3,7 @@ package site;
 import bean.Book;
 import bean.Catalog;
 import engine.BaseSite;
+import util.BookGriper;
 import util.NetUtil;
 import util.RegexUtil;
 import util.TextUtil;
@@ -80,14 +81,7 @@ public class Biquge extends BaseSite {
 
     @Override
     public List<String> parseContent(String chapterHtml) {
-        String sub = RegexUtil.regexExcept("<div id=\"content\">", "</div>", chapterHtml).get(0);
-        String lines[] = sub.split("<br>|<br/>|<br />");
-        List<String> contents = new ArrayList<>();
-        for (String line : lines) {
-            if (!line.trim().isEmpty()) {
-                contents.add(line);
-            }
-        }
-        return contents;
+        String content = RegexUtil.regexExcept("<div id=\"content\">", "</div>", chapterHtml).get(0);
+        return BookGriper.getContentsByBR(content);
     }
 }

@@ -4,13 +4,7 @@
 
 聚合了多个小说网站资源，选择性高。
 
-已支持网站：
-
-- [笔趣阁](http://www.biquge.com.tw)
-- [笔神阁](http://www.bishenge.com)
-- [看神作(推荐)](http://www.kanshenzuo.com)
-- ~~[南山书院](https://www.szyangxiao.com)~~
-- ~~[E8中文网](http://www.e8zw.com)~~
+目前已支持8个小说网站，几乎能找到所有想看的小说。
 
 
 <img src="https://github.com/Zzzia/BookDownloader/blob/master/screenshot/pic1.png">

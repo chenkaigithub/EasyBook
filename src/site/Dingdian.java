@@ -5,6 +5,7 @@ import bean.Catalog;
 import engine.BaseSite;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import util.BookGriper;
 
@@ -42,14 +43,7 @@ public class Dingdian extends BaseSite {
 
     @Override
     public List<String> parseContent(String chapterHtml) {
-        String html = Jsoup.parse(chapterHtml).getElementById("content").text();
-        String lines[] = html.split("<br>|<br/>|<br />");
-        List<String> contents = new ArrayList<>();
-        for (String line : lines) {
-            if (!line.trim().isEmpty()) {
-                contents.add(line);
-            }
-        }
-        return contents;
+        List<TextNode> textNodes = Jsoup.parse(chapterHtml).getElementById("content").textNodes();
+        return BookGriper.getContentsByTextNodes(textNodes);
     }
 }
