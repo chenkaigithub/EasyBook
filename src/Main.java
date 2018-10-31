@@ -9,20 +9,22 @@ import java.util.Scanner;
  * Created By zia on 2018/10/30.
  */
 public class Main implements EventListener {
+    private static Downloader downloader;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Downloader downloader = new Downloader(new Main());
+        downloader = new Downloader(new Main());
         //设置保存格式
         downloader.setSaveResult(Downloader.Type.EPUB);
         //设置保存路径，默认在项目文件夹下
         downloader.setSavePath("/Users/jiangzilai/Documents/book");
         System.out.println("输入书籍名字:");
         String bookName = scanner.nextLine();
-        downloader.download(bookName);
+        downloader.search(bookName);
     }
 
     @Override
-    public Book onChooseBook(List<Book> books) {
+    public void onChooseBook(List<Book> books) {
         for (int i = 0; i < books.size(); i++) {
             Book book = books.get(i);
             System.out.print("[" + i + "]");
@@ -45,7 +47,7 @@ public class Main implements EventListener {
                 break;
             }
         }
-        return books.get(index);
+        downloader.download(books.get(index));
     }
 
     @Override

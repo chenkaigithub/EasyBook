@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 public class Downloader {
 
 
-    private Type type;
+    private Type type = Type.EPUB;
     private EventListener eventListener;
     private String path = ".";
 
@@ -29,15 +29,11 @@ public class Downloader {
         this.eventListener = eventListener;
     }
 
-    public void download(String bookName) {
-        download(bookName, Type.EPUB);
+    public void search(String bookName) {
+        search(bookName, SiteUtil.getAllSites());
     }
 
-    public void download(String bookName, Type type) {
-        download(bookName, SiteUtil.getAllSites(), type);
-    }
-
-    public void download(String bookName, List<BaseSite> sites, Type type) {
+    public void search(String bookName, List<BaseSite> sites) {
         if (path == null) {
             eventListener.onError("请输入文件路径", new FileNotFoundException());
             return;
@@ -114,8 +110,12 @@ public class Downloader {
         eventListener.pushMessage("搜索到" + bookList.size() + "本相关书籍");
 
         //选择要下载的书籍
-        Book book = eventListener.onChooseBook(bookList);
+        eventListener.onChooseBook(bookList);
 
+
+    }
+
+    public void download(Book book) {
         BookFucker bookFucker = new BookFucker(book, eventListener);
         List<Chapter> chapters;
         try {

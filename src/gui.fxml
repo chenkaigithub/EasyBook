@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="90.0" prefWidth="540.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" prefWidth="60.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <TextField fx:id="searchField" promptText="输入小说名字">
+                    <GridPane.margin>
+                        <Insets left="3.0" right="3.0" />
+                    </GridPane.margin>
+                </TextField>
+                <Button fx:id="searchButton" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="60.0" text="查找" GridPane.columnIndex="1">
+                    <GridPane.margin>
+                        <Insets right="3.0" />
+                    </GridPane.margin>
+                </Button>
+            </children>
+        </GridPane>
+
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="90.0" prefWidth="540.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" prefWidth="60.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <TextField fx:id="path" promptText="保存路径，默认保存在软件相同目录">
+                    <GridPane.margin>
+                        <Insets left="3.0" right="3.0" />
+                    </GridPane.margin>
+                </TextField>
+                <Button fx:id="selectPath" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="60.0" text="选择" GridPane.columnIndex="1">
+                    <GridPane.margin>
+                        <Insets right="3.0" />
+                    </GridPane.margin>
+                </Button>
+            </children>
+        </GridPane>
+
+        <VBox>
+            <ListView fx:id="listView" prefHeight="300.0">
+            <VBox.margin>
+               <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+            </VBox.margin></ListView>
+            <TextArea fx:id="status" prefHeight="20">
+            <VBox.margin>
+               <Insets bottom="3.0" left="3.0" right="3.0" />
+            </VBox.margin></TextArea>
+        </VBox>
+
+        <HBox>
+            <Hyperlink fx:id="zzzia" text="by zzzia" underline="true">
+            <HBox.margin>
+               <Insets bottom="2.0" top="2.0" />
+            </HBox.margin></Hyperlink>
+         <ChoiceBox prefWidth="100.0" fx:id="choiceBox">
+            <HBox.margin>
+               <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
+            </HBox.margin>
+         </ChoiceBox>
+            <Button fx:id="downloadButton" mnemonicParsing="false" text="下载">
+            <HBox.margin>
+               <Insets bottom="2.0" left="10.0" top="2.0" />
+            </HBox.margin></Button>
+        </HBox>
+
+    </children>
+</VBox>

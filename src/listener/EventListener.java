@@ -5,7 +5,7 @@ import bean.Book;
 import java.util.List;
 
 public interface EventListener {
-    Book onChooseBook(List<Book> books);
+    void onChooseBook(List<Book> books);
 
     void pushMessage(String msg);
 
